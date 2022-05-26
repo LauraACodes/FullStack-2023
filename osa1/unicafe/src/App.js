@@ -11,14 +11,14 @@ const App = () => {
   const addBad = () => setBad(bad + 1)
 
   return (
-    <div>
+    <>
       <h1>give feedback</h1>
       <Button handleClick={addGood} teksti='good' />
       <Button handleClick={addNeutral} teksti='neutral' />
       <Button handleClick={addBad} teksti='bad' />
       <h1>statistics</h1>
       <Statistics good={good} neutral={neutral} bad={bad} />
-    </div>
+    </>
   )
 }
 
@@ -42,18 +42,26 @@ const Statistics = ({ good, neutral, bad }) => {
   }
 
   return (
-    <div>
-      <StatsLine nimi='good' arvo={good} />
-      <StatsLine nimi='neutral' arvo={neutral} />
-      <StatsLine nimi='bad' arvo={bad} />
-      <StatsLine nimi='all' arvo={yht} />
-      <StatsLine nimi='average' arvo={ka} />
-      <StatsLine nimi='positive' arvo={pos + '%'} />
-    </div>
+    <table>
+      <tbody>
+        <StatsLine nimi='good' arvo={good} />
+        <StatsLine nimi='neutral' arvo={neutral} />
+        <StatsLine nimi='bad' arvo={bad} />
+        <StatsLine nimi='all' arvo={yht} />
+        <StatsLine nimi='average' arvo={ka} />
+        <StatsLine nimi='positive' arvo={pos + '%'} />
+      </tbody>
+    </table>
   )
 }
 
 
-const StatsLine = ({ nimi, arvo }) => <p>{nimi} {arvo}</p>
+const StatsLine = ({ nimi, arvo }) => (
+  <tr>
+    <td>{nimi}</td>
+    <td>{arvo}</td>
+  </tr>
+)
+
 
 export default App
