@@ -11,15 +11,12 @@ const Course = ({ course }) => {
     )
   }
   
-  const Header = ({ name }) => <h1>{name}</h1>
+const Header = ({ name }) => <h2>{name}</h2>
   
-  const Content = ({ parts }) => parts.map(part => <Part key={part.id} part={part} /> )
+const Content = ({ parts }) => parts.map(part => <Part key={part.id} part={part} /> )
   
-  const Part = ({ part }) => 
-    <p>
-      {part.name} {part.exercises}
-    </p>
+const Part = ({ part }) => <p>{part.name} {part.exercises}</p>
   
-  const Total = ({ sum }) => <h4>total of exercises {sum}</h4>
+const Total = ({ sum }) => <h4>total of exercises {sum}</h4>
 
-  export default Course
+export default Course
