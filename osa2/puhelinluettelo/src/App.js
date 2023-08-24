@@ -2,14 +2,36 @@ import { useState, useEffect } from 'react'
 import FilterForm from './components/FilterForm.js'
 import PersonForm from './components/PersonForm.js'
 import PersonList from './components/PersonList.js'
+import Notification from './components/Notification.js'
 import personService from './services/persons.js'
 
 const App = () => {
+
+  const messageStyleOk = {
+    color: 'green',
+    background: 'lightgreen',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10
+  }
+
+  const messageStyleError = {
+    color: 'red',
+    background: 'lightgray',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10
+  }
+
   const [persons, setPersons] = useState([]) 
 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [confirmMessage, setConfirmMessage] = useState('')
+  const [messageStyle, setMessageStyle] = useState()
 
   useEffect(() => {
     personService
@@ -48,9 +70,16 @@ const App = () => {
         .create(personObject)
         .then(returnedPerson => {
           setPersons(persons.concat(returnedPerson))
+          setMessageStyle(messageStyleOk)
+          setConfirmMessage(`Added ${newName} to phonebook!`)
+          setTimeout(() => {
+            setConfirmMessage(null)
+          },5000)
           setNewName('')
           setNewNumber('')
         })
+      
+
     }
     else {
       console.log('tupla')
@@ -62,9 +91,18 @@ const App = () => {
           .updateNumber(person.id, updatedPerson)
           .then(updatedP=> {
             setPersons(persons.map(p => p.id !== person.id ? p : updatedP))
+            setConfirmMessage(`Updated ${newName}'s number!`)
+            setTimeout(() => {
+              setConfirmMessage(null)
+            },5000)
             setNewName('')
             setNewNumber('')
           })
+          .catch(error => {
+            setMessageStyle(messageStyleError)
+            setConfirmMessage(`Information of ${newName} was already been removed from server`)
+          })
+          
       }
     }
   }
@@ -75,13 +113,22 @@ const App = () => {
     if (window.confirm(`Sure to delete ${persons.find( (person) => person.id === id).name}?`)) {
       personService
         .deletePerson(id)
-        .then(() => setPersons(persons.filter(person => person.id !== id)))
+        .then(() => {
+          setConfirmMessage(`Deleted the number!`)
+          setTimeout(() => {
+            setConfirmMessage(null)
+          },5000)
+          setPersons(persons.filter(person => person.id !== id))
+        })
     }
   }
+
+
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={confirmMessage} messageStyle={messageStyle} />
       <FilterForm handleFilter={handleFilter} />
       <h2>Add a new</h2>
       <PersonForm addPerson={addPerson} newName={newName} handlePersonNameChange={handlePersonNameChange} newNumber={newNumber} handlePersonNumberChange={handlePersonNumberChange} />
