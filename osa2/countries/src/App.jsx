@@ -16,6 +16,7 @@ const App = () => {
 
   const handleSearchValueChange = (event) => {
     const eventValue = event.target.value
+    console.log(`search target value ${event.target.value} type ${typeof(event.target.value)}`)
     const filteredCountries = countries.filter(country => country.toLowerCase().includes(eventValue))
     setSearchValue(eventValue)
     setMatchingCountries(filteredCountries)
@@ -32,8 +33,21 @@ const App = () => {
     }
   }
 
-  const handleMatchingChange = (event) => {
+  const handleCountryClick = (event) => {
+    console.log(`filter value ${event.target.id} type ${typeof(event.target.id)}`)
+    const filteredCountries = countries.filter(country => country.toLowerCase() === event.target.id.toLowerCase())
+    setMatchingCountries(filteredCountries)
+    console.log(`filter value ${event.target.id} size ${filteredCountries.length}`)
 
+    console.log(`handle country click, even target ${event.target.id}`)
+    countryService
+    .getOne(event.target.id)
+    .then(response => {
+      setMatchingCountry(response)
+      setMatchingCountries(filteredCountries)
+      console.log(`recived country = ${response}`)
+      console.log(`matching countrries sixe ${matchingCountries.length}`)
+    })  
   }
 
   console.log(`matching country: ${matchingCountry}`)
@@ -71,7 +85,7 @@ const App = () => {
       <div>
         <h1>Countries</h1>
         <FindForm searchValue={searchValue} handleSearchValueChange={handleSearchValueChange} />
-        <SelectedCountry matchingCountry={matchingCountry} name={matchingCountries[0]}/>
+        <SelectedCountry matchingCountry={matchingCountry} name={matchingCountries[0]} />
 
       </div>
     )
@@ -83,7 +97,7 @@ const App = () => {
       <div>
         <h1>Countries</h1>
         <FindForm searchValue={searchValue} handleSearchValueChange={handleSearchValueChange} />
-        <CountryList matchingCountries={matchingCountries}  />
+        <CountryList matchingCountries={matchingCountries} handleCountryClick={handleCountryClick} />
       </div>
     )
   }

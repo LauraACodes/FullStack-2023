@@ -1,7 +1,10 @@
-const Country = ({country}) => {
+const Country = ({country, handleCountryClick}) => {
     console.log(country)
     return (
-        <li>{country}</li>
+        <li>
+            {country}
+            <button id={country} onClick={handleCountryClick}>show</button>
+        </li>
     )
 }
 
