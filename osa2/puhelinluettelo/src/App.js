@@ -37,6 +37,7 @@ const App = () => {
     personService
       .getAll()
       .then(initialPersons => {
+        console.log(`persons: ${initialPersons}`)
         console.log('promise fulfilled')
         setPersons(initialPersons)
       })
